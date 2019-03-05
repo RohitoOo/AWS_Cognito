@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+       <script src="js/amazon-cognito-auth.min.js"></script>
+        <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+        <script src="js/amazon-cognito-identity.min.js"></script>
+
+<!-- <script src="test.js"></script> -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AWS Cognito</title>
+</head>
+<body>
+    <div class="container" >
+
+  
+        <h1 class="center">AWS Cognito - Simple Registration</h1>
+
+        <form>
+                <div class="form-group">
+                        <label for="exampleInputEmail1">Name</label>
+                        <input type="text" class="form-control" id="personalName" aria-describedby="emailHelp" placeholder="Name">
+                      </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Email address</label>
+                  <input type="email" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter email">
+                  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Password</label>
+                  <input type="password" class="form-control" id="password" placeholder="Password">
+                </div>
+          
+    
+                <button type="submit" class="btn btn-primary" onclick="registerButton()">Submit</button>
+                <div id="link">
+                        
+                      </div>
+              </form>
+            </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script src="./config.js"></script>
+
+<script>
+
+var personalName
+var username
+var password
+
+var poolData
+
+function registerButton() {
+
+   
+    event.preventDefault()
+    console.log(_config)
+    personalName = document.getElementById('personalName').value
+    username = document.getElementById('username').value
+    password = document.getElementById('password').value
+    
+    console.log({personalName})
+
+
+    poolData = {
+        UserPoolId: _config.cognito.userPoolId,
+        ClientId: _config.cognito.clientId 
+    }
+
+    var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData)
+
+// Required Fields As Per Personal AWS settings
+// name & email
+
+    var attributeList = []
+
+    var dataEmail = {
+        Name: `email`,
+        Value: username
+    }
+
+    var dataPersonalName = {
+        Name: `name`,
+        Value: personalName
+    }
+
+    var attributeEmail = new AmazonCognitoIdentity.CognitoUserAttribute(dataEmail)
+    var attributeName = new AmazonCognitoIdentity.CognitoUserAttribute(dataPersonalName)
+
+
+    attributeList.push(attributeEmail)
+    attributeList.push(attributeName)
+
+// Final Step 
+
+userPool.signUp(username, password, attributeList, null, function(err, result){
+    if(err){
+        console.log(err.message || JSON.stringify(err))
+        return;
+    }
+    cognitoUser = result.userPool
+    console.log("User Name is ", cognitoUser.getUsername())
+
+    // change elements of page 
+
+    document.getElementById("link").innerHTML =  `Check your email ${username} for a verification link`
+
+})
+
+}
+
+
+</script>
+
+</html>
+

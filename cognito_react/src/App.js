@@ -32,12 +32,10 @@ Amplify.configure({
 
 class App extends Component {
   state = {
-    username: "",
-    password: ""
+    code: ""
   }
-
   render() {
-    const { username, password } = this.state
+    const { code } = this.state
     return (
       <Grommet theme={theme}>
         <Box direction="row" height="large" overflow={{ horizontal: "hidden" }}>
@@ -68,31 +66,39 @@ class App extends Component {
                   username: this.rootFormik.state.values.username,
                   password: this.rootFormik.state.values.password,
                   attributes: {
-                    name: username // optional
+                    name: this.rootFormik.state.values.username // optional
                     // phone_number // optional - E.164 number convention
                     // // other custom attributes
                   },
                   validationData: [] //optional
                 })
 
-                  .then(data => console.log({ data }))
-                  .catch(err => console.log({ err }))
+                  .then(data => {
+                    console.log({ data })
 
-                // // After retrieving the confirmation code from the user
-                // Auth.confirmSignUp(username, code, {
-                //   // Optional. Force user confirmation irrespective of existing alias. By default set to True.
-                //   forceAliasCreation: true
-                // })
-                //   .then(data => console.log(data))
-                //   .catch(err => console.log(err))
+                    // Redirect to Sign In Page  ----- Pending
 
-                // Auth.resendSignUp(username)
-                //   .then(() => {
-                //     console.log("code resent successfully")
-                //   })
-                //   .catch(e => {
-                //     console.log(e)
-                //   })
+                    // // After retrieving the confirmation code from the user
+                    // Auth.confirmSignUp(
+                    //   this.rootFormik.state.values.username,
+                    //   data.userSub,
+                    //   {
+                    //     // Optional. Force user confirmation irrespective of existing alias. By default set to True.
+                    //     forceAliasCreation: true
+                    //   }
+                    // )
+                    //   .then(data => console.log("2", data))
+                    //   .catch(err => console.log("2", err))
+
+                    // Auth.resendSignUp(this.rootFormik.state.values.username)
+                    //   .then(() => {
+                    //     console.log("code resent successfully")
+                    //   })
+                    //   .catch(e => {
+                    //     console.log(e)
+                    //   })
+                  })
+                  .catch(err => console.log("1", err))
               }}
               render={props => (
                 <form onSubmit={props.handleSubmit}>

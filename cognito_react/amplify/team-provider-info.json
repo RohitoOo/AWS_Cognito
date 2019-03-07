@@ -1,0 +1,19 @@
+{
+    "testing": {
+        "awscloudformation": {
+            "AuthRoleName": "cognitoreact-20190305223431-authRole",
+            "UnauthRoleArn": "arn:aws:iam::260532539243:role/cognitoreact-20190305223431-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::260532539243:role/cognitoreact-20190305223431-authRole",
+            "Region": "us-east-2",
+            "DeploymentBucketName": "cognitoreact-20190305223431-deployment",
+            "UnauthRoleName": "cognitoreact-20190305223431-unauthRole",
+            "StackName": "cognitoreact-20190305223431",
+            "StackId": "arn:aws:cloudformation:us-east-2:260532539243:stack/cognitoreact-20190305223431/c1763110-3fc0-11e9-9b29-0afb0832a490"
+        },
+        "categories": {
+            "auth": {
+                "cognito3b87c171": {}
+            }
+        }
+    }
+}

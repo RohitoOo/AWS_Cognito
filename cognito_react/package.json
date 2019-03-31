@@ -5,13 +5,20 @@
   "dependencies": {
     "aws-amplify": "^1.1.22",
     "aws-amplify-react": "^2.3.2",
+    "axios": "^0.18.0",
     "formik": "^1.5.1",
     "grommet": "^2.5.5",
     "grommet-icons": "^4.2.0",
+    "lodash": "^4.17.11",
+    "mobx": "^5.9.4",
+    "mobx-react": "^5.4.3",
     "react": "^16.8.4",
-    "react-dom": "^16.8.4",
+    "react-dom": "^16.8.6",
+    "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.5",
-    "styled-components": "^4.1.3"
+    "recompose": "^0.30.0",
+    "styled-components": "^4.1.3",
+    "yup": "^0.27.0"
   },
   "devDependencies": {
     "webpack": "^4.17.1",

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+       <script src="js/amazon-cognito-auth.min.js"></script>
+        <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+        <script src="js/amazon-cognito-identity.min.js"></script>
+
+<!-- <script src="test.js"></script> -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AWS Cognito</title>
+</head>
+<body>
+    <div class="container" >
+
+  
+        <h1 class="center">AWS Cognito - Simple Login</h1>
+
+        <form>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Email address</label>
+                  <input type="email" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Password</label>
+                  <input type="password" class="form-control" id="password" placeholder="Password">
+                </div>
+          
+    
+              <a href="https://cloudaccess.netlify.com/admin/profile" target="_blank"> <button type="submit" class="btn btn-primary" onclick="signInButton()">Login</button></a> 
+
+              <a href="https://cloudaccess.netlify.com/admin/profile" target="_blank">WTF</a>
+                <div id="link">
+                        
+                      </div>
+              </form>
+            </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script src="./config.js"></script>
+
+<script>
+
+var personalName
+var username
+var password
+
+var poolData
+
+function signInButton() {
+    event.preventDefault()
+    
+	var authenticationData = {
+        Username : document.getElementById("username").value,
+        Password : document.getElementById("password").value,
+    };
+
+    console.log({authenticationData})
+	
+    var authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
+    
+
+    console.log({authenticationDetails})
+
+	var poolData = {
+        UserPoolId : _config.cognito.userPoolId, // Your user pool id here
+        ClientId : _config.cognito.clientId, // Your client id here
+    };
+	
+    var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+    console.log({userPool})
+
+	
+    var userData = {
+        Username : document.getElementById("username").value,
+        Pool : userPool,
+    };
+    
+
+    console.log({userData})
+
+    
+    var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+    console.log({cognitoUser})
+
+    
+	cognitoUser.authenticateUser(authenticationDetails, {
+
+        onSuccess: function (result) {
+			var accessToken = result.getAccessToken().getJwtToken();
+            console.log(accessToken);	
+            console.log({result});
+            console.log({authenticationDetails});
+        },
+
+        onFailure: function(err) {
+            console.log({err});
+            },
+    });
+}
+
+</script>
+
+</html>
+

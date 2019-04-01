@@ -34,28 +34,25 @@ class Partner extends Component {
   }
   state = {
     validation: false,
-    invitations: [],
     currentUser: ""
   }
   render() {
-    const { validation, invitations, currentUser } = this.state
+    const { validation, currentUser } = this.state
     return (
       <div>
         <Formik
           ref={_ref => (this.rootFormik = _ref)}
           onSubmit={async (values, { resetForm }) => {
-            const partner_id = currentUser.partner_id
-            const partnerName = values.partnerName
-            const partner = {
-              partner_id,
-              partnerName
+            // Create Gateway
+
+            const gateway = {
+              name: values.gatewayName,
+              ip: values.ipaddress,
+              partner_id: currentUser.partner_id
             }
 
-            // Update Database
-            this.props.partnerStore.updatePartner(partner)
-            // Redirect To Next Page
-
-            this.props.history.push("/inviteusers")
+            this.props.gatewayStore.createGateway(gateway)
+            // Update Partner (gateway_id)
 
             this.setState({
               //   invitations: [...this.props.userStore.users],
@@ -67,7 +64,8 @@ class Partner extends Component {
           validateOnChange={validation}
           //   validationSchema={schema}
           initialValues={{
-            partnerName: ""
+            ipaddress: "",
+            gatewayName: ""
           }}
           render={props => (
             <form onSubmit={props.handleSubmit}>
@@ -101,24 +99,37 @@ class Partner extends Component {
                         <Text
                           margin="xsmall"
                           color={props.errors.email ? "brand" : null}>
-                          Partner Name
+                          Gateway Name
                         </Text>
                         <FormField>
                           <TextInput
-                            name="partnerName"
-                            value={props.values.partnerName}
+                            name="gatewayName"
+                            value={props.values.gatewayName}
                             onChange={props.handleChange}
                           />
                         </FormField>
                       </Box>
-
+                      <Box>
+                        <Text
+                          margin="xsmall"
+                          color={props.errors.email ? "brand" : null}>
+                          IP
+                        </Text>
+                        <FormField>
+                          <TextInput
+                            name="ipaddress"
+                            value={props.values.ipaddress}
+                            onChange={props.handleChange}
+                          />
+                        </FormField>
+                      </Box>
                       <Box justify="end" margin="small">
                         <Button
                           onClick={() => {
                             this.setState({ validation: true })
                           }}
                           type="submit"
-                          label="Update"
+                          label="Create Gateway"
                           color="brand"
                           hoverIndicator="brand"
                         />
@@ -166,7 +177,7 @@ class Partner extends Component {
 }
 
 const PartnerEnhanced = compose(
-  inject("userStore", "partnerStore"),
+  inject("userStore", "partnerStore", "gatewayStore"),
   observer
 )(Partner)
 export default PartnerEnhanced

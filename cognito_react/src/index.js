@@ -6,10 +6,12 @@ import * as serviceWorker from "./serviceWorker"
 import { Provider } from "mobx-react"
 import userStore from "./stores/userStore"
 import partnerStore from "./stores/partnerStore"
+import gatewayStore from "./stores/gatewayStore"
 
 const stores = {
   userStore,
-  partnerStore
+  partnerStore,
+  gatewayStore
 }
 ReactDOM.render(
   <Provider {...stores}>

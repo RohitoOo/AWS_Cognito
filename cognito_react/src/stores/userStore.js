@@ -14,50 +14,34 @@ class UserStore {
   //     Hub.listen("auth", this, "UserStoreListener")
   //   }
 
+  // Set User After Users Registers / Login
   setUser = async email => {
-    let currentUser = { email }
-    this.currentUser = currentUser
-    localStorage.setItem("currentUser", JSON.stringify(currentUser))
-
-    // const user = await axios.post("http://localhost:4000/getuser", {
-    //   email
-    // })
-
-    // this.currentUser = { ...user.data }
-
-    // this.currentUser = await user.data
-
-    // this.currentUser = {
-    //     email:"", partnerId
-    // }
-
-    // this.loading = true
-    // console.log("Called")
-    // this.currentUser = {
-    //   email,
-    //   partnerId
-    // }
-    // this.loading = false
-  }
-
-  loadUser = async () => {
-    this.loading = true
-    const { email } = JSON.parse(localStorage.getItem("currentUser"))
-    console.log("USER STORE", this.currentUser)
+    // localStorage.setItem("currentUser", JSON.stringify(currentUser))
 
     const user = await axios.post("http://localhost:4000/getuser", {
       email
     })
-
     const { data } = user
+    this.currentUser = { ...data }
+    localStorage.setItem("currentUser", JSON.stringify(...data))
+  }
 
-    await console.log("DATA", data)
+  // Invite User By Updating The Partner_Id
 
-    this.currentUser = [...data]
-
-    await console.log("??", this.currentUser)
+  updateUser = async user => {
+    this.loading = true
+    await axios.post("http://localhost:4000/updateuser", {
+      user
+    })
     this.loading = false
-    return this.currentUser
+  }
+
+  getAllUsers = async partner_id => {
+    const users = await axios.post("http://localhost:4000/getallusers", {
+      partner_id
+    })
+
+    return users
   }
 
   //   loadUser = async () => {
@@ -176,8 +160,9 @@ class UserStore {
 
 decorate(UserStore, {
   currentUser: observable,
-  loadUser: action,
+  updateUser: action,
   setUser: action,
+  getAllUsers: action,
   loading: observable
 })
 

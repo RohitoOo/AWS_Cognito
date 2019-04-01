@@ -14,6 +14,8 @@ import { Formik } from "formik"
 import { Switch, Route, Redirect } from "react-router-dom"
 import User from "./User/User"
 import Partner from "./Partner/Partner"
+import InviteUsers from "./User/InviteUsers"
+
 import { BrowserRouter } from "react-router-dom"
 
 class App extends Component {
@@ -26,6 +28,7 @@ class App extends Component {
               <Route exact path="/" render={() => <Redirect to="/user" />} />
               <Route path="/user" component={User} />
               <Route path="/partner" component={Partner} />
+              <Route path="/inviteusers" component={InviteUsers} />
             </Switch>
           </Box>
         </Grommet>

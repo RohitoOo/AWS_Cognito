@@ -25,9 +25,9 @@ const schema = Yup.object().shape({
 })
 class Partner extends Component {
   componentWillMount = async () => {
-    const currentUser = await this.props.userStore.loadUser()
+    const currentUser = await JSON.parse(localStorage.getItem("currentUser"))
 
-    console.log(...currentUser)
+    console.log(currentUser)
     this.setState({
       currentUser
     })
@@ -44,26 +44,18 @@ class Partner extends Component {
         <Formik
           ref={_ref => (this.rootFormik = _ref)}
           onSubmit={async (values, { resetForm }) => {
-            const partner_id = currentUser[0].partner_id
+            const partner_id = currentUser.partner_id
             const partnerName = values.partnerName
             const partner = {
               partner_id,
               partnerName
             }
+
+            // Update Database
             this.props.partnerStore.updatePartner(partner)
+            // Redirect To Next Page
 
-            // console.log(result)
-            // console.log(result.message)
-            // const input = {
-            //   firstName: this.rootFormik.state.values.firstName,
-            //   lastName: this.rootFormik.state.values.lastName,
-            //   email: this.rootFormik.state.values.email,
-            //   userRoleId: "a512e888-b204-4bea-ad73-798811dbfbb6",
-            //   accountStatus: "Active"
-            // }
-            // console.log({ input })
-
-            // // Save to Database
+            this.props.history.push("/inviteusers")
 
             this.setState({
               //   invitations: [...this.props.userStore.users],
@@ -89,23 +81,8 @@ class Partner extends Component {
                   round="xsmall">
                   <Box justify="center" pad="large">
                     <Text>
-                      Welcome!{" "}
-                      {currentUser.length > 0 && currentUser[0].username}
+                      Welcome! {currentUser.username}
                       ...
-                    </Text>
-                  </Box>
-                </Box>
-
-                {/* Users */}
-                <Box
-                  align="center"
-                  background="light-1"
-                  direction="row"
-                  border={{ color: "border", size: "small" }}
-                  round="xsmall">
-                  <Box justify="center" pad="large">
-                    <Text size="large" weight="bold">
-                      Update Partner Information
                     </Text>
                   </Box>
                 </Box>
@@ -135,7 +112,9 @@ class Partner extends Component {
 
                     <Box justify="end" margin="small">
                       <Button
-                        onClick={() => this.setState({ validation: true })}
+                        onClick={() => {
+                          this.setState({ validation: true })
+                        }}
                         type="submit"
                         label="Update"
                         color="brand"
